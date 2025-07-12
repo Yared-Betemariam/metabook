@@ -1,4 +1,4 @@
-export const authRoutes = ["/signin"];
+export const authRoutes = ["/signin", "/auth/error"];
 
 export const defauthLoginRedirect = "/dashboard";
 

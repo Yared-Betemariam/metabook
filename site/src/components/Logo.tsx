@@ -10,22 +10,22 @@ interface Props {
 
 const Logo = ({ className, logo }: Props) => {
   return (
-    <Link href="/" className={cn(className)}>
+    <Link href="/" className={cn("w-fit", className)}>
       {logo ? (
         <Image
           src="/logo.png"
           alt="Metabook Logo"
           width={80}
           height={80}
-          className="w-10 h-10 md:w-12 md:h-12"
+          className="w-10"
         />
       ) : (
         <>
           <Image
             src="/logo_wide.png"
             alt="Metabook Logo"
-            width={80}
-            height={80}
+            width={140}
+            height={140}
             className="w-34 md:w-40"
           />
         </>

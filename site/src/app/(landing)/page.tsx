@@ -8,9 +8,11 @@ const Page = () => {
   return (
     <>
       <Header />
-      <Hero />
-      <Features />
-      <CTA />
+      <main className="flex flex-col">
+        <Hero />
+        <Features />
+        <CTA />
+      </main>
       <Footer />
     </>
   );

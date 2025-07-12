@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { CleanSession } from "@/types";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { cache } from "react";
 import superjson from "superjson";
@@ -16,15 +17,16 @@ const t = initTRPC.context<Context>().create({
 });
 
 const isAuthed = t.middleware(({ ctx, next }) => {
-  if (!ctx.session?.user?.email) {
+  if (!ctx.session?.user || !ctx.session.user.id || !ctx.session.user.email) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
       message: "Not authenticated",
     });
   }
+
   return next({
     ctx: {
-      session: ctx.session,
+      session: ctx.session as CleanSession,
     },
   });
 });

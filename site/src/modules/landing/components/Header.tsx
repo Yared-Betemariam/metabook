@@ -5,6 +5,7 @@ import Link from "next/link";
 import Logo from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import MenuSheet from "./MenuSheet";
+import { useUser } from "@/modules/auth/hooks";
 
 export const navLinks = [
   {
@@ -14,7 +15,7 @@ export const navLinks = [
 ];
 
 const Header = () => {
-  const user = null;
+  const { user } = useUser();
 
   return (
     <header className="absolute border-b z-50 top-0 w-full h-[5rem]">
@@ -44,16 +45,22 @@ const Header = () => {
 
           {!user && (
             <>
-              <Button size={"lg"} className="text-base!">
-                Sign in
-              </Button>
+              <Link href="/signin">
+                <Button size={"lg"} className="text-base!">
+                  Signin
+                </Button>
+              </Link>
             </>
           )}
 
           {user && (
-            <Button size={"lg"} className="text-base!">
-              Dashboard
-            </Button>
+            <>
+              <Link href="/dashboard">
+                <Button variant={"outline"} size={"lg"} className="text-base!">
+                  Dashboard
+                </Button>
+              </Link>
+            </>
           )}
         </div>
       </nav>

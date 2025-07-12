@@ -20,7 +20,6 @@ export const {
     },
     async jwt({ token }) {
       try {
-        console.log("runnign ath");
         const [user] = await db
           .select()
           .from(users)
@@ -41,17 +40,19 @@ export const {
     async signIn({ account, profile }) {
       if (account?.provider === "google") {
         try {
-          console.log("runnign ath");
+          if (!profile?.email) return false;
+
           const [user] = await db
             .select()
             .from(users)
-            .where(eq(users.email, profile?.email as string));
+            .where(eq(users.email, profile.email));
 
           if (!user) {
             await db.insert(users).values({
-              email: account.email as string,
-              name: account.name as string,
+              email: profile.email,
+              name: profile.name,
             });
+
             return true;
           }
 
@@ -66,6 +67,7 @@ export const {
   },
   pages: {
     signIn: "/signin",
+    error: "/auth/error",
   },
   providers: [
     Google({

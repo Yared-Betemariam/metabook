@@ -1,18 +1,21 @@
-import { z } from "zod";
-import { baseProcedure, createTRPCRouter } from "../init";
+import { db } from "@/db";
+import { users } from "@/db/schema";
+import { createTRPCRouter, protectedProcedure } from "../init";
+import { eq } from "drizzle-orm";
+import { profileSchema } from "@/schemas";
 
 export const appRouter = createTRPCRouter({
-  hello: baseProcedure
-    .input(
-      z.object({
-        text: z.string(),
-      })
-    )
-    .query((opts) => {
-      console.log("Server running");
-      return {
-        greeting: `hello ${opts.input.text}`,
-      };
+  updateProfile: protectedProcedure
+    .input(profileSchema)
+    .mutation(async (opts) => {
+      console.log("st");
+      await db
+        .update(users)
+        .set(opts.input)
+        .where(eq(users.email, opts.ctx.session.user.email));
+      console.log("en");
+
+      return { success: true, message: "User successfully updated!" };
     }),
 });
 
