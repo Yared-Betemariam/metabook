@@ -1,17 +1,17 @@
 import { TRPCProvider } from "@/trpc/client";
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
-import { Roboto } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 import "./globals.css";
 
-const font = Roboto({
+const font = Open_Sans({
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | Metabook",
-    default: "Metabook",
+    template: "%s | Metabook - AI Trading Journal",
+    default: "Metabook - AI Trading Journal",
   },
   description:
     "A simple trade journaling application with AI assistance for analysis and statistics.",
@@ -33,7 +33,11 @@ export default function RootLayout({
     <SessionProvider>
       <TRPCProvider>
         <html lang="en">
-          <body className={`${font.className} antialiased`}>{children}</body>
+          <body
+            className={`${font.className} antialiased flex flex-col min-h-screen relative`}
+          >
+            {children}
+          </body>
         </html>
       </TRPCProvider>
     </SessionProvider>
