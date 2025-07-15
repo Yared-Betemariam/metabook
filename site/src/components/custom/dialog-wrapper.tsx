@@ -27,12 +27,16 @@ const DialogWrapper: React.FC<DialogWrapperProps> = ({
 }) => {
   return (
     <Dialog open={open} onOpenChange={onOpen}>
-      <DialogContent className={cn("space-y-0 gap-4 p-0", className)}>
-        <DialogHeader className="border-b p-6">
-          <DialogTitle className="text-3xl">{title}</DialogTitle>
+      <DialogContent
+        className={cn("space-y-0 gap-4 flex flex-col p-0", className)}
+      >
+        <DialogHeader className="border-b p-6 pt-8">
+          <DialogTitle className="text-xl">{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-        <div className="overflow-auto px-6 pb-6">{children}</div>
+        {children && (
+          <div className="overflow-auto w-full flex-1">{children}</div>
+        )}
       </DialogContent>
     </Dialog>
   );

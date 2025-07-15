@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { SettingsModal } from "../auth/components/SettingsModal";
+import { AccountsModal } from "../accounts/components/AccountModal";
+import { ConfirmationModal } from "./components/ConfirmationModal";
 
 const Modals = () => {
   const [mounted, setMounted] = useState(false);
@@ -17,6 +19,8 @@ const Modals = () => {
   return (
     <>
       <SettingsModal />
+      <ConfirmationModal />
+      <AccountsModal />
     </>
   );
 };

@@ -1,5 +1,5 @@
+import { ProfileFormValues } from "@/schemas";
 import { useSession } from "next-auth/react";
-import { ProfileFormValues } from "../components/SettingsModal";
 
 export const useUser = () => {
   const { data, update, status } = useSession();

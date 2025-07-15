@@ -29,8 +29,8 @@ A simple trade journaling application with AI assistance for analaysis and stati
 - Analysis
 - AI Assistant - chat with ai
 - Reports - reports of your progress
-- Instruments - Trade distubutions and PNL change by each trading pair
-- Dates - Trade distubutions and PNL change by days, weeks, months
+  - Instruments - Trade distubutions and PNL change by each trading pair
+  - Dates - Trade distubutions and PNL change by days, weeks, months
 
 ## Tech Stack
 

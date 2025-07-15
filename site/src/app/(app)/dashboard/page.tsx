@@ -1,10 +1,9 @@
-import UserButton from "@/modules/auth/components/UserButton";
+"use client";
+
+import Loader from "@/components/custom/loader";
 
 const Page = () => {
-  return (
-    <div>
-      Dashboard (Protected) Page <UserButton />
-    </div>
-  );
+  return <Loader />;
 };
+
 export default Page;

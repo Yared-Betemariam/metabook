@@ -10,7 +10,6 @@ interface ModalStore {
     onCompleted?: (data?: unknown) => void;
   }) => void;
 
-  // for datas
   data: unknown;
   view?: boolean;
   onCompleted: ((data?: unknown) => void) | null;
@@ -37,3 +36,60 @@ export const useModalStore = create<ModalStore>((set) => ({
       onCompleted: null,
     }),
 }));
+
+interface ConfirmationModalStore {
+  openModal: (data: {
+    title: string;
+    onClick: () => void;
+    description?: string;
+    onCompleted?: () => void;
+    variant?: "default" | "destructive";
+  }) => void;
+
+  open: boolean;
+  variant?: "default" | "destructive";
+
+  isLoading: boolean;
+
+  title: string | null;
+  description: string | null;
+
+  handleClick: (() => void) | null;
+
+  closeModal: () => void;
+}
+
+export const useConfirmationModalStore = create<ConfirmationModalStore>(
+  (set) => ({
+    isLoading: false,
+    open: false,
+    title: null,
+    description: null,
+    handleClick: null,
+
+    openModal: ({ title, description, onClick, variant }) => {
+      const handleClick = () => {
+        set({ isLoading: true });
+
+        onClick();
+      };
+
+      set({
+        open: true,
+        title: title ?? null,
+        description: description ?? null,
+        handleClick: handleClick,
+        variant: variant,
+      });
+    },
+
+    closeModal: () =>
+      set({
+        open: false,
+        title: null,
+        isLoading: false,
+        description: null,
+        handleClick: null,
+      }),
+  })
+);
