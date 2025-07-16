@@ -68,7 +68,7 @@ export const AccountsModal = () => {
     reValidateMode: "onSubmit",
     defaultValues: {
       name: account?.name || "",
-      balance: account?.balance || Number(),
+      balance: account?.balance ? account.balance.toString() : undefined,
       description: account?.description ?? undefined,
     },
   });
@@ -77,7 +77,7 @@ export const AccountsModal = () => {
     if (account) {
       form.reset({
         name: account.name ?? "",
-        balance: account.balance || Number(),
+        balance: account?.balance ? account.balance.toString() : undefined,
         description: account.description ?? undefined,
       });
     }
@@ -139,12 +139,7 @@ export const AccountsModal = () => {
                   <FormItem>
                     <FormLabel>Balance</FormLabel>
                     <FormControl itemType="number">
-                      <Input
-                        placeholder="5000"
-                        {...field}
-                        type="number"
-                        onChange={(e) => field.onChange(Number(e.target.value))}
-                      />
+                      <Input placeholder="5000" {...field} type="text" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

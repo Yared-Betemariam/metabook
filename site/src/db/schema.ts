@@ -1,15 +1,12 @@
 import {
+  integer,
+  pgTable,
+  real,
   serial,
   text,
   timestamp,
-  pgTable,
-  integer,
-  real,
   varchar,
-  pgEnum,
 } from "drizzle-orm/pg-core";
-
-export const outcomeEnum = pgEnum("outcome", ["win", "loss"]);
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
@@ -30,22 +27,37 @@ export const accounts = pgTable("accounts", {
 
 export const trades = pgTable("trades", {
   id: serial("id").primaryKey(),
+  user_id: integer("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
   account_id: integer("account_id")
     .notNull()
     .references(() => accounts.id, { onDelete: "cascade" }),
-  pair: varchar("pair", { length: 10 }).notNull(),
+  pair: varchar("pair", { length: 20 }).notNull(),
   date: timestamp("date").defaultNow().notNull(),
-  bias: varchar("bias", { length: 50 }).notNull(),
-  point_of_interest: text("point_of_interest").array(),
-  outcome: outcomeEnum("outcome"),
+  position: varchar("position", { length: 50 }).notNull(),
+  outcome: text("outcome"),
   pnl: real("pnl"),
-  chart: varchar("chart", { length: 2048 }),
+  chart: text("chart"),
   notes: text("notes"),
   tags: text("tags").array(),
+});
+
+export const chats = pgTable("chats", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  messages: text("messages").notNull(),
+  user_id: integer("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  account_id: integer("account_id")
+    .notNull()
+    .references(() => accounts.id, { onDelete: "cascade" }),
 });
 
 export type User = typeof users.$inferSelect;
 export type Account = typeof accounts.$inferSelect;
 export type Trade = typeof trades.$inferSelect;
+export type Chat = typeof chats.$inferSelect;
 
 export type Outcome = "win" | "loss";

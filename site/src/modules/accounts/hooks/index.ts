@@ -26,3 +26,9 @@ export const useActiveAccount = () => {
 
   return foundAccount || null;
 };
+
+export const useAccountId = () => {
+  const params = useParams<{ id: string }>();
+
+  return Number(params.id);
+};

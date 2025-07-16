@@ -17,6 +17,9 @@ import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "./button";
+import { Popover, PopoverContent, PopoverTrigger } from "./popover";
+import { FaSortDown } from "react-icons/fa";
+import { Calendar } from "./calendar";
 
 const Form = FormProvider;
 
@@ -217,4 +220,62 @@ export {
   FormButton,
   FormMessage,
   FormField,
+};
+
+type DatePickerProps = {
+  value?: string;
+  setValue?: (value: string) => void;
+  onChange?: (date: Date | undefined) => void;
+  required?: boolean;
+  disabled?: boolean;
+  placeholder?: string;
+  className?: string;
+};
+
+export const DatePicker: React.FC<DatePickerProps> = ({
+  value,
+  setValue,
+  onChange,
+  disabled,
+  placeholder = "Select date",
+  className = "",
+}) => {
+  const [open, setOpen] = React.useState(false);
+  const date = value ? new Date(value) : undefined;
+
+  const handleSelect = (date: Date | undefined) => {
+    if (date) {
+      setValue?.(date.toISOString());
+      onChange?.(date);
+    }
+    setOpen(false);
+  };
+
+  return (
+    <Popover open={open} onOpenChange={setOpen} modal>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          className={cn("justify-between", className)}
+          disabled={disabled}
+          type="button"
+        >
+          {date ? date.toLocaleDateString() : placeholder}
+          <FaSortDown className="size-5 mb-1.5" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent
+        className="w-auto z-[100]! overflow-hidden p-0"
+        align="start"
+      >
+        <Calendar
+          mode="single"
+          selected={date}
+          captionLayout="dropdown"
+          onSelect={handleSelect}
+          disabled={disabled}
+        />
+      </PopoverContent>
+    </Popover>
+  );
 };

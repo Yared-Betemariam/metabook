@@ -56,5 +56,3 @@ export const accountRouter = createTRPCRouter({
       };
     }),
 });
-
-export type AppRouter = typeof accountRouter;

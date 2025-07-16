@@ -1,5 +1,8 @@
 type ISODateString = string;
 
+export const timeRangeList = ["today", "week", "month", "all"];
+export type TimeRange = "today" | "week" | "month" | "all";
+
 export interface CleanSession {
   user: {
     id: string;
@@ -9,3 +12,6 @@ export interface CleanSession {
   };
   expires: ISODateString;
 }
+
+export const tradeStateList = ["create", "edit", "view"];
+export type TradeState = "create" | "edit" | "view";

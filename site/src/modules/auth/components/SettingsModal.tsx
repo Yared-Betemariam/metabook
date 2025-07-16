@@ -103,7 +103,7 @@ export const SettingsModal = () => {
         </div>
       </div>
       <div className="border-y bg-zinc-100 mb-6 px-6 py-3 flex flex-col">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center mb-2 justify-between">
           <span className="text-sm opacity-70">
             Accounts ({accounts?.data.length || 0})
           </span>
@@ -119,11 +119,11 @@ export const SettingsModal = () => {
           </Button>
         </div>
         {accounts?.data && (
-          <ScrollAreaWrapper className="flex divide-y flex-col mt-2 max-h-20 pr-2">
+          <ScrollAreaWrapper className="flex flex-col max-h-20 pr-2">
             {accounts.data.map((item) => (
               <div
                 key={item.id}
-                className="flex group/item py-1.5 gap-3 items-center text-sm"
+                className="flex group/item pb-1 gap-3 items-center text-sm"
               >
                 <span
                   className={cn(

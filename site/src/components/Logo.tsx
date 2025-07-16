@@ -17,7 +17,7 @@ const Logo = ({ className, logo }: Props) => {
           alt="Metabook Logo"
           width={80}
           height={80}
-          className="w-10"
+          className="w-8 h-auto drop-shadow"
         />
       ) : (
         <>

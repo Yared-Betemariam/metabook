@@ -43,7 +43,7 @@ const UserButton = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="w-fit flex items-center gap-2 p-1 ring-2 ring-transparent hover:ring-zinc-300/25 duration-100 transition-all rounded-full">
+      <DropdownMenuTrigger className="w-fit flex items-center gap-2 p-1 ring-2 ring-transparent hover:ring-zinc-300/25 duration-100 transition-all rounded-full flex-row-reverse">
         <div className="bg-gradient-to-b from-sky-600 to-sky-700 rounded-full size-8 text-white/40 relative overflow-hidden">
           <IoPerson className="absolute -bottom-0.5 -left-0 size-7" />
         </div>

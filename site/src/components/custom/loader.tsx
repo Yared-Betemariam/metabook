@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { LoaderIcon } from "lucide-react";
+import Logo from "../Logo";
 
 const Loader = ({ shaded }: { shaded?: boolean }) => {
   return (
@@ -12,8 +12,7 @@ const Loader = ({ shaded }: { shaded?: boolean }) => {
         }
       )}
     >
-      {/* <Circle className=" absolute inset-0 opacity-25" /> */}
-      <LoaderIcon className="size-6 animate-spin duration-[1.5s] transition-all" />
+      <Logo logo className="size-10" />
       <span className="text-sm">Loading...</span>
     </div>
   );
