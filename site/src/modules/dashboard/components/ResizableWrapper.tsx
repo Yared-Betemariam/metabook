@@ -1,6 +1,7 @@
 "use client";
 
 import Logo from "@/components/Logo";
+import { Button } from "@/components/ui/button";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -8,15 +9,13 @@ import {
 } from "@/components/ui/resizable";
 import { cn } from "@/lib/utils";
 import AccountsButton from "@/modules/accounts/components/AccountsButton";
+import { useActiveAccount } from "@/modules/accounts/hooks";
 import UserButton from "@/modules/auth/components/UserButton";
+import { Plus } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 import HeaderWrapper from "./HeaderWrapper";
-import { Button } from "@/components/ui/button";
-import { Calendar, Plus } from "lucide-react";
-import { useAccountId } from "@/modules/accounts/hooks";
-import { format } from "date-fns";
 
 const links = [
   {
@@ -42,7 +41,7 @@ type Props = {
 
 const ResizableWrapper = ({ children }: Props) => {
   const pathname = usePathname();
-  const accountId = useAccountId();
+  const activeAccount = useActiveAccount();
 
   return (
     <ResizablePanelGroup
@@ -56,18 +55,14 @@ const ResizableWrapper = ({ children }: Props) => {
           <span className="border-r h-full" />
           <AccountsButton />
           <span className="border-r h-full" />
-          <div className="flex flex-col">
-            <span className="opacity-70 text-sm">Todate</span>
-            <p className="flex items-center gap-1.5 font-medium">
-              <Calendar className="size-4.5 brightness-90 text-primary" />
-              <span>
-                {new Date().toLocaleDateString()}{" "}
-                {format(new Date(), "h:mm aaa")}
-              </span>
+          <div className="flex flex-col -space-y-0.5">
+            <span className="opacity-70 text-sm">Balance</span>
+            <p className="text-xl tracking-tight font-medium">
+              ${activeAccount?.balance.toLocaleString() || 0}
             </p>
           </div>
           <div className="flex gap-4 ml-auto">
-            <Link href={`/dashboard/${accountId}/trades/create`}>
+            <Link href={`/dashboard/${activeAccount?.id}/trades/create`}>
               <Button size={"sm"}>
                 <Plus /> Add Trade
               </Button>

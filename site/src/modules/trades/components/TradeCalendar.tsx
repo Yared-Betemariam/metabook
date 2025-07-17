@@ -4,6 +4,7 @@ import TimeChevron from "@/components/custom/time-chevron";
 import { Trade } from "@/db/schema";
 import { useTimeStringDate } from "@/hooks/use-timestring-date";
 import { formatCurrency } from "@/lib/utils";
+import DPage from "@/modules/dashboard/components/DPage";
 import { useMemo } from "react";
 
 interface TradingCalendarProps {
@@ -147,41 +148,43 @@ export default function TradingCalendar({
   }, [calendarDays]);
 
   return (
-    <div className="w-full flex-1 flex flex-col mx-auto bg-white">
-      <div className="flex items-center justify-between px-4 pb-1">
-        <TimeChevron
-          timeString={timeString}
-          setTimeString={setTimeString}
-          currentDate={currentDate}
-        />
+    <DPage
+      title="Calendar view"
+      headerCpts={
+        <>
+          <div className="flex items-center gap-8">
+            <TimeChevron
+              timeString={timeString}
+              setTimeString={setTimeString}
+              currentDate={currentDate}
+            />
+            <div className="text-right flex flex-col -space-y-0.5">
+              <div className="text-sm text-gray-500">Net Pnl</div>
+              <div className="text-lg font-medium tracking-tight">
+                <span
+                  className={
+                    monthlyStats.totalPnl == 0
+                      ? "text-zinc-600"
+                      : monthlyStats.totalPnl > 0
+                      ? "text-green-600"
+                      : "text-red-600"
+                  }
+                >
+                  {formatCurrency(monthlyStats.totalPnl)}
+                </span>
+              </div>
+            </div>
 
-        <div className="flex items-center gap-8">
-          <div className="text-right flex flex-col -space-y-0.5">
-            <div className="text-sm text-gray-500">Net Pnl</div>
-            <div className="text-lg font-semibold">
-              <span
-                className={
-                  monthlyStats.totalPnl == 0
-                    ? "text-zinc-600"
-                    : monthlyStats.totalPnl > 0
-                    ? "text-green-600"
-                    : "text-red-600"
-                }
-              >
-                {formatCurrency(monthlyStats.totalPnl)}
-              </span>
+            <div className="text-right flex flex-col -space-y-0.5">
+              <div className="text-sm text-gray-500">Trading days</div>
+              <div className="text-lg font-medium tracking-tight text-gray-900">
+                {monthlyStats.tradingDays} days
+              </div>
             </div>
           </div>
-
-          <div className="text-right flex flex-col -space-y-0.5">
-            <div className="text-sm text-gray-500">Trading days</div>
-            <div className="text-lg font-semibold text-gray-900">
-              {monthlyStats.tradingDays} days
-            </div>
-          </div>
-        </div>
-      </div>
-
+        </>
+      }
+    >
       <div className="grid grid-cols-[7fr_1fr] gap-2 px-4">
         <div className="flex flex-col w-full">
           <div className="grid grid-cols-7 gap-2 not-checked:h-10">
@@ -290,6 +293,6 @@ export default function TradingCalendar({
           })}
         </div>
       </div>
-    </div>
+    </DPage>
   );
 }

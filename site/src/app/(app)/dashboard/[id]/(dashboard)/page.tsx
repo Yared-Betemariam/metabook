@@ -53,15 +53,17 @@ const Dashboard = () => {
   }, [data]);
 
   return (
-    <DPage className="px-6 pb-6" title="Analytics dashboard">
-      <div className="flex items-end mb-2 justify-between">
-        <span>Performace stats</span>
+    <DPage
+      headerCpts={
         <TimeChevron
           timeString={timeString}
           setTimeString={setTimeString}
           currentDate={date}
         />
-      </div>
+      }
+      className="px-6 pb-6"
+      title="Analytics dashboard"
+    >
       <div className="grid grid-cols-3 gap-4">
         {/* stat cards */}
         <StatCard

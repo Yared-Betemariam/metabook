@@ -23,7 +23,7 @@ const DPage = ({
       <div
         className={cn(
           "flex flex-row items-center justify-between px-6",
-          desc ? "h-22" : "h-16"
+          desc ? "h-24" : "h-20"
         )}
       >
         <div className="flex flex-col gap-0.5">
@@ -31,7 +31,7 @@ const DPage = ({
             <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
             {subheader && <span className="text-sm">{subheader}</span>}
           </div>
-          {desc && <p className="text-muted-foreground text-sm">{desc}</p>}
+          {desc && <p className="text-muted-foregroun tex-sm">{desc}</p>}
         </div>
         {headerCpts}
       </div>

@@ -53,7 +53,7 @@ const TimeChevron = ({ timeString, setTimeString, currentDate }: Props) => {
         size={"icon"}
         variant={"outline"}
         onClick={() => navigateMonth("prev")}
-        className="size-6 border-dashed rounded-full bg-zinc-100 hover:bg-zinc-200 transition-colors"
+        className="size-5 border-dashed rounded-full hover:bg-zinc-100 transition-colors"
       >
         <ChevronLeft className="w-5 h-5" />
       </Button>
@@ -66,7 +66,7 @@ const TimeChevron = ({ timeString, setTimeString, currentDate }: Props) => {
         size={"icon"}
         variant={"outline"}
         onClick={() => navigateMonth("next")}
-        className="size-6 border-dashed rounded-full bg-zinc-100 hover:bg-zinc-200 transition-colors"
+        className="size-5 border-dashed rounded-full hover:bg-zinc-100 transition-colors"
       >
         <ChevronRight className="w-5 h-5" />
       </Button>
