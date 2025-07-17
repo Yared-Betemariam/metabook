@@ -13,7 +13,7 @@ import {
   type FieldValues,
 } from "react-hook-form";
 
-import { cn } from "@/lib/utils";
+import { cn, convertToUniversalDate } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "./button";
@@ -245,8 +245,8 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 
   const handleSelect = (date: Date | undefined) => {
     if (date) {
-      setValue?.(date.toISOString());
-      onChange?.(date);
+      if (setValue) setValue(convertToUniversalDate(date).toISOString());
+      if (onChange) onChange(convertToUniversalDate(date));
     }
     setOpen(false);
   };

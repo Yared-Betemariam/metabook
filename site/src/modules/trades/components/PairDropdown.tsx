@@ -178,7 +178,7 @@ export function PairDropdown({ value, onChange, disabled }: PairDropdownProps) {
               <CommandEmpty>No trading pairs found.</CommandEmpty>
             )}
 
-            {canAddNew && (
+            {filteredPairs.length === 0 && canAddNew && (
               <>
                 <Button
                   variant={"outline"}

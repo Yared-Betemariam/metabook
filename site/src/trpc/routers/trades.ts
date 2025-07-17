@@ -1,9 +1,9 @@
 import { db } from "@/db";
-import { trades } from "@/db/schema";
+import { accounts, trades } from "@/db/schema";
 import { getTimeRangeCondition } from "@/db/utils";
 import { tradeSchema } from "@/schemas";
 import { TimeRange, timeRangeList } from "@/types";
-import { and, eq, gt, lt } from "drizzle-orm";
+import { and, eq, gt, lt, sql } from "drizzle-orm";
 import z from "zod";
 import { createTRPCRouter, protectedProcedure } from "../init";
 import { monthsList } from "@/lib/utils";
@@ -18,6 +18,17 @@ export const tradesRouter = createTRPCRouter({
         pnl: opts.input.pnl ? Number(opts.input.pnl) : undefined,
       })
       .returning();
+
+    if (opts.input.pnl) {
+      const pnlChange = parseFloat(opts.input.pnl);
+
+      await db
+        .update(accounts)
+        .set({
+          balance: sql`${accounts.balance} + ${pnlChange}`,
+        })
+        .where(eq(accounts.id, opts.input.account_id));
+    }
 
     return {
       success: true,
@@ -103,16 +114,31 @@ export const tradesRouter = createTRPCRouter({
       };
     }),
   edit: protectedProcedure
-    .input(tradeSchema.extend({ id: z.number() }))
+    .input(
+      tradeSchema.extend({ id: z.number(), prevPnl: z.string().optional() })
+    )
     .mutation(async (opts) => {
+      const { prevPnl, ...updateData } = opts.input;
+
       const [updatedTrade] = await db
         .update(trades)
         .set({
-          ...opts.input,
+          ...updateData,
           pnl: opts.input.pnl ? Number(opts.input.pnl) : undefined,
         })
         .where(eq(trades.id, opts.input.id))
         .returning();
+
+      if (prevPnl && opts.input.pnl) {
+        const change = parseFloat(opts.input.pnl) - parseFloat(prevPnl);
+
+        await db
+          .update(accounts)
+          .set({
+            balance: sql`${accounts.balance} + ${change}`,
+          })
+          .where(eq(accounts.id, updateData.account_id));
+      }
 
       return {
         success: true,

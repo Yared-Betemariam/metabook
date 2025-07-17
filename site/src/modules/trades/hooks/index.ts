@@ -1,8 +1,6 @@
 import { trpc } from "@/trpc/client";
 import { useParams } from "next/navigation";
-import { useTimeRangeStore } from "../store";
-import { useState } from "react";
-import { format } from "date-fns";
+import { useTimeRangeStore, useTimeStringStore } from "../store";
 
 export const useUserTrades = () => {
   const { id } = useParams<{ id: string }>();
@@ -28,9 +26,7 @@ export const useUserTrades = () => {
 
 export const useCalendarTrades = () => {
   const { id } = useParams<{ id: string }>();
-  const [timeString, setTimeString] = useState(
-    format(new Date(), "MMM-yyyy").toLowerCase()
-  );
+  const { timeString, setTimeString } = useTimeStringStore();
   const utils = trpc.useUtils();
 
   const { data, isLoading } = trpc.trades.calendar.useQuery({

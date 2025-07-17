@@ -122,7 +122,7 @@ const Page = () => {
   });
 
   return (
-    <DPage subheader={getReadableDateRange(timeRange)} title="Trades List">
+    <DPage desc={getReadableDateRange(timeRange)} title="Trades List">
       <DataTable
         timeRange={timeRange}
         setTimeRange={setTimeRange}

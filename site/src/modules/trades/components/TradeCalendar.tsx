@@ -1,8 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import TimeChevron from "@/components/custom/time-chevron";
 import { Trade } from "@/db/schema";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useTimeStringDate } from "@/hooks/use-timestring-date";
+import { formatCurrency } from "@/lib/utils";
 import { useMemo } from "react";
 
 interface TradingCalendarProps {
@@ -36,25 +37,7 @@ export default function TradingCalendar({
   setTimeString,
 }: TradingCalendarProps) {
   // Parse timeString (e.g., "feb-2025" -> February 2025)
-  const currentDate = useMemo(() => {
-    const [monthStr, yearStr] = timeString.split("-");
-    const monthNames = [
-      "jan",
-      "feb",
-      "mar",
-      "apr",
-      "may",
-      "jun",
-      "jul",
-      "aug",
-      "sep",
-      "oct",
-      "nov",
-      "dec",
-    ];
-    const monthIndex = monthNames.indexOf(monthStr.toLowerCase());
-    return new Date(Number.parseInt(yearStr), monthIndex, 1);
-  }, [timeString]);
+  const currentDate = useTimeStringDate(timeString);
 
   // Filter trades for current month
   const monthTrades = useMemo(() => {
@@ -163,86 +146,14 @@ export default function TradingCalendar({
     return weeks;
   }, [calendarDays]);
 
-  const navigateMonth = (direction: "prev" | "next") => {
-    const [monthStr, yearStr] = timeString.split("-");
-    const monthNames = [
-      "jan",
-      "feb",
-      "mar",
-      "apr",
-      "may",
-      "jun",
-      "jul",
-      "aug",
-      "sep",
-      "oct",
-      "nov",
-      "dec",
-    ];
-    const currentMonthIndex = monthNames.indexOf(monthStr.toLowerCase());
-    const currentYear = Number.parseInt(yearStr);
-
-    let newMonthIndex =
-      direction === "next" ? currentMonthIndex + 1 : currentMonthIndex - 1;
-    let newYear = currentYear;
-
-    if (newMonthIndex > 11) {
-      newMonthIndex = 0;
-      newYear++;
-    } else if (newMonthIndex < 0) {
-      newMonthIndex = 11;
-      newYear--;
-    }
-
-    setTimeString(`${monthNames[newMonthIndex]}-${newYear}`);
-  };
-
-  const formatCurrency = (amount: number) => {
-    const absAmount = Math.abs(amount);
-    const sign = amount > 0 ? "+" : amount < 0 ? "-" : "";
-
-    if (absAmount < 1000) {
-      // 2-3 digits: show as is
-      return `${sign}$${absAmount}`;
-    } else {
-      // 4+ digits: show in K format
-      const kValue = absAmount / 1000;
-      return `${sign}$${kValue.toFixed(1)}K`;
-    }
-  };
-
-  const monthName = currentDate.toLocaleString("default", {
-    month: "long",
-    year: "numeric",
-  });
-
   return (
-    <div className="w-full flex-1 border-t flex flex-col mx-auto bg-white">
-      {/* Header */}
-      <div className="flex items-center border-b justify-between px-4 py-1">
-        <div className="flex items-center gap-4">
-          <Button
-            size={"icon"}
-            variant={"outline"}
-            onClick={() => navigateMonth("prev")}
-            className="size-6 border-dashed rounded-full bg-zinc-100 hover:bg-zinc-200 transition-colors"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </Button>
-
-          <h1 className="text-lg font-medium text-zinc-900 min-w-[140px] text-center">
-            {monthName}
-          </h1>
-
-          <Button
-            size={"icon"}
-            variant={"outline"}
-            onClick={() => navigateMonth("next")}
-            className="size-6 border-dashed rounded-full bg-zinc-100 hover:bg-zinc-200 transition-colors"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </Button>
-        </div>
+    <div className="w-full flex-1 flex flex-col mx-auto bg-white">
+      <div className="flex items-center justify-between px-4 pb-1">
+        <TimeChevron
+          timeString={timeString}
+          setTimeString={setTimeString}
+          currentDate={currentDate}
+        />
 
         <div className="flex items-center gap-8">
           <div className="text-right flex flex-col -space-y-0.5">

@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import React from "react";
 
 type Props = {
@@ -5,23 +6,38 @@ type Props = {
   title: string;
   desc?: string;
   headerCpts?: React.ReactNode;
+  className?: string;
   subheader?: string;
 };
 
-const DPage = ({ children, title, desc, headerCpts, subheader }: Props) => {
+const DPage = ({
+  children,
+  title,
+  desc,
+  headerCpts,
+  subheader,
+  className,
+}: Props) => {
   return (
     <div className="flex flex-col">
-      <div className="flex flex-row items-center justify-between px-6 h-16">
-        <div className="flex flex-col gap-1">
+      <div
+        className={cn(
+          "flex flex-row items-center justify-between px-6",
+          desc ? "h-22" : "h-16"
+        )}
+      >
+        <div className="flex flex-col gap-0.5">
           <div className="flex items-center gap-4">
             <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
             {subheader && <span className="text-sm">{subheader}</span>}
           </div>
-          {desc && <p>{desc}</p>}
+          {desc && <p className="text-muted-foreground text-sm">{desc}</p>}
         </div>
         {headerCpts}
       </div>
-      {children}
+      <div className={cn("flex flex-col h-full flex-1", className)}>
+        {children}
+      </div>
     </div>
   );
 };

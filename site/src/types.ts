@@ -15,3 +15,8 @@ export interface CleanSession {
 
 export const tradeStateList = ["create", "edit", "view"];
 export type TradeState = "create" | "edit" | "view";
+
+export type BalanceByDate = {
+  date: Date;
+  balance: number;
+};

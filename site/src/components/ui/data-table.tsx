@@ -97,7 +97,7 @@ export function DataTable<TData, TValue>({
             }}
             className="flex-1 bg-zinc-900/5 shadow-none rounded-none border-border text-base"
           />
-          <div className="flex items-center">
+          <div className="flex items-center gap-3">
             <span className="flex items-center gap-2 text-sm opacity-60 ml-2.5 mr-1">
               <GoFilter className="size-5" />
             </span>

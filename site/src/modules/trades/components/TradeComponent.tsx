@@ -21,13 +21,14 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useUserTrades } from "../hooks";
+import { useCalendarTrades, useUserTrades } from "../hooks";
 import { useActiveTradeStore } from "../store";
 import { PairDropdown } from "./PairDropdown";
 import { RichTextEditor } from "./RichTextEditor";
 import { TagsEditor } from "./TagsEditor";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
+import { convertToUniversalDate } from "@/lib/utils";
 
 type Props = {
   state: TradeState;
@@ -35,10 +36,12 @@ type Props = {
 
 export const TradeComponent = ({ state }: Props) => {
   const { invalidate } = useUserTrades();
+  const { invalidate: invalidateCalendar } = useCalendarTrades();
   const { trade, updateTrade } = useActiveTradeStore();
   const accountId = useAccountId();
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
+  const utils = trpc.useUtils();
 
   const createMutation = trpc.trades.create.useMutation({
     onSuccess: (data) => {
@@ -48,6 +51,12 @@ export const TradeComponent = ({ state }: Props) => {
         invalidate();
 
         router.back();
+
+        if (data.data.pnl) {
+          utils.accounts.invalidate();
+
+          invalidateCalendar();
+        }
 
         form.reset();
       }
@@ -63,6 +72,12 @@ export const TradeComponent = ({ state }: Props) => {
         toast.success(data.message);
 
         invalidate();
+
+        if (data.data.pnl && trade?.pnl && data.data.pnl !== trade.pnl) {
+          utils.accounts.invalidate();
+
+          invalidateCalendar();
+        }
 
         updateTrade({ trade: data.data });
       }
@@ -80,7 +95,9 @@ export const TradeComponent = ({ state }: Props) => {
         ? {
             account_id: trade?.account_id || accountId || 0,
             pair: trade?.pair || "",
-            date: trade?.date ? new Date(trade.date) : new Date(),
+            date: trade?.date
+              ? new Date(trade.date)
+              : convertToUniversalDate(new Date()),
             position: trade?.position || "",
             outcome: trade?.outcome ?? "",
             pnl: trade?.pnl ? trade.pnl.toString() : undefined,
@@ -89,7 +106,7 @@ export const TradeComponent = ({ state }: Props) => {
             tags: trade?.tags ?? [],
           }
         : {
-            date: new Date(),
+            date: convertToUniversalDate(new Date()),
             notes: "",
             outcome: "",
             pnl: "",
@@ -101,20 +118,31 @@ export const TradeComponent = ({ state }: Props) => {
   });
 
   const onSubmit = (values: TradeFormValues) => {
+    let pnlValue = values.pnl;
+
+    if (values.outcome === "loss" && pnlValue) {
+      const num = Math.abs(Number(pnlValue));
+      pnlValue = (-num).toString();
+    } else if (values.outcome === "win" && pnlValue) {
+      const num = Math.abs(Number(pnlValue));
+      pnlValue = num.toString();
+    }
+
     if (trade && state == "edit") {
       updateMutation.mutate({
         ...values,
         id: trade.id,
         chart: values.chart || undefined,
         outcome: values.outcome || undefined,
-        pnl: values.pnl || undefined,
+        pnl: pnlValue || undefined,
+        prevPnl: trade?.pnl?.toString() || undefined,
       });
     } else {
       createMutation.mutate({
         ...values,
         chart: values.chart || undefined,
         outcome: values.outcome || undefined,
-        pnl: values.pnl || undefined,
+        pnl: pnlValue || undefined,
       });
     }
   };
