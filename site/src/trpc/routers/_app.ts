@@ -5,10 +5,12 @@ import { eq } from "drizzle-orm";
 import { profileSchema } from "@/schemas";
 import { accountRouter } from "./accounts";
 import { tradesRouter } from "./trades";
+import { chatsRouter } from "./chats";
 
 export const appRouter = createTRPCRouter({
   accounts: accountRouter,
   trades: tradesRouter,
+  chats: chatsRouter,
   updateProfile: protectedProcedure
     .input(profileSchema)
     .mutation(async (opts) => {

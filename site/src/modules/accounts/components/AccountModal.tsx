@@ -68,7 +68,7 @@ export const AccountsModal = () => {
     reValidateMode: "onSubmit",
     defaultValues: {
       name: account?.name || "",
-      balance: account?.balance ? account.balance.toString() : undefined,
+      balance: account?.balance ? account.balance.toString() : "",
       description: account?.description ?? undefined,
     },
   });
@@ -77,7 +77,7 @@ export const AccountsModal = () => {
     if (account) {
       form.reset({
         name: account.name ?? "",
-        balance: account?.balance ? account.balance.toString() : undefined,
+        balance: account?.balance ? account.balance.toString() : "",
         description: account.description ?? undefined,
       });
     }

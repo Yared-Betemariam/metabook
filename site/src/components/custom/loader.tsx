@@ -12,7 +12,7 @@ const Loader = ({ shaded }: { shaded?: boolean }) => {
         }
       )}
     >
-      <Logo logo className="size-10" />
+      <Logo logo className="size-10" size="lg" />
       <span className="text-sm">Loading...</span>
     </div>
   );

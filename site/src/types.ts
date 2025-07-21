@@ -20,3 +20,8 @@ export type BalanceByDate = {
   date: Date;
   balance: number;
 };
+
+export type ChatMessage = {
+  author: "ai" | "user" | "metabook";
+  content: string;
+};

@@ -1,43 +1,44 @@
-import { chatSchema } from "@/schemas";
-import { createTRPCRouter, protectedProcedure } from "../init";
-import { db } from "@/db";
-import { chats } from "@/db/schema";
-import { and, eq } from "drizzle-orm";
+import { llm } from "@/ai/bedrock";
+import { ChatMessage } from "@/types";
 import z from "zod";
+import { createTRPCRouter, protectedProcedure } from "../init";
 
-export const chatRouter = createTRPCRouter({
-  user: protectedProcedure
-    .input(z.object({ account_id: z.number() }))
-    .query(async (opts) => {
-      const [userChat] = await db
-        .select()
-        .from(chats)
-        .where(
-          and(
-            eq(chats.user_id, Number(opts.ctx.session.user.id)),
-            eq(chats.account_id, opts.input.account_id)
-          )
-        );
-
-      return {
-        success: true,
-        message: "Chat successfully fetched!",
-        data: userChat,
-      };
-    }),
-  update: protectedProcedure
-    .input(chatSchema.extend({ id: z.number() }))
+export const chatsRouter = createTRPCRouter({
+  chat: protectedProcedure
+    .input(
+      z.object({
+        messages: z.string().optional(),
+        message: z.string(),
+      })
+    )
     .mutation(async (opts) => {
-      const [updatedChat] = await db
-        .update(chats)
-        .set({ ...opts.input })
-        .where(eq(chats.id, opts.input.id))
-        .returning();
+      const parsed_messages: ChatMessage[] = JSON.parse(
+        opts.input.messages || "[]"
+      );
+
+      console.log(parsed_messages);
+
+      parsed_messages.push({
+        author: "user",
+        content: opts.input.message,
+      });
+
+      const res = await llm.invoke(
+        parsed_messages.map((item) => ({
+          role:
+            item.author == "user"
+              ? "user"
+              : item.author == "metabook"
+              ? "system"
+              : "assistant",
+          content: item.content,
+        }))
+      );
 
       return {
         success: true,
         message: "Chat successfully updated!",
-        data: updatedChat,
+        data: res.content.toString(),
       };
     }),
 });

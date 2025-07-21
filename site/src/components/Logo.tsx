@@ -6,9 +6,10 @@ interface Props {
   black?: boolean;
   logo?: boolean;
   className?: string;
+  size?: string;
 }
 
-const Logo = ({ className, logo }: Props) => {
+const Logo = ({ className, logo, size }: Props) => {
   return (
     <Link href="/" className={cn("w-fit", className)}>
       {logo ? (
@@ -17,7 +18,7 @@ const Logo = ({ className, logo }: Props) => {
           alt="Metabook Logo"
           width={80}
           height={80}
-          className="w-8 h-auto drop-shadow"
+          className={cn("w-8 h-auto drop-shadow", size == "lg" && "w-12")}
         />
       ) : (
         <>

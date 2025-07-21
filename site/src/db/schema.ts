@@ -43,21 +43,8 @@ export const trades = pgTable("trades", {
   tags: text("tags").array(),
 });
 
-export const chats = pgTable("chats", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  messages: text("messages").notNull(),
-  user_id: integer("user_id")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
-  account_id: integer("account_id")
-    .notNull()
-    .references(() => accounts.id, { onDelete: "cascade" }),
-});
-
 export type User = typeof users.$inferSelect;
 export type Account = typeof accounts.$inferSelect;
 export type Trade = typeof trades.$inferSelect;
-export type Chat = typeof chats.$inferSelect;
 
 export type Outcome = "win" | "loss";
